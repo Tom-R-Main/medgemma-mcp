@@ -42,8 +42,10 @@ medgemma-mcp
 | Device | Memory | dtype | Status |
 |--------|--------|-------|--------|
 | NVIDIA GPU | >= 8GB VRAM | bfloat16 | Recommended |
-| Apple Silicon (M1/M2/M3/M4) | >= 16GB unified | float16 | Supported (MPS) |
+| Apple Silicon (M1/M2/M3/M4) | >= 16GB unified | float32 | Supported (MPS) |
 | CPU | >= 16GB RAM | float32 | Supported (slow) |
+
+> **Note:** MPS requires float32 — float16 causes numerical instability with MedGemma on Apple Silicon. float32 uses ~16GB for the model, fitting comfortably on 24GB+ Macs.
 
 The server auto-detects your hardware and selects the optimal configuration.
 

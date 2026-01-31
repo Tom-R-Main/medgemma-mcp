@@ -36,11 +36,15 @@ class MedGemmaContext:
 
 
 def _detect_device() -> tuple[str, torch.dtype]:
-    """Detect the best available device and appropriate dtype."""
+    """Detect the best available device and appropriate dtype.
+
+    MPS (Apple Silicon) requires float32 — float16 causes numerical
+    instability where MedGemma generates only pad tokens.
+    """
     if torch.cuda.is_available():
         return "cuda", torch.bfloat16
     if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-        return "mps", torch.float16
+        return "mps", torch.float32
     return "cpu", torch.float32
 
 
@@ -52,7 +56,7 @@ def _load_model(model_id: str) -> tuple[AutoModelForImageTextToText, AutoProcess
 
     model = AutoModelForImageTextToText.from_pretrained(
         model_id,
-        torch_dtype=dtype,
+        dtype=dtype,
         device_map="auto" if device == "cuda" else None,
     )
 

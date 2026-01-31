@@ -139,7 +139,7 @@ def _generate(
         tokenize=True,
         return_dict=True,
         return_tensors="pt",
-    ).to(model.device, dtype=model.dtype)
+    ).to(model.device)
 
     input_len = inputs["input_ids"].shape[-1]
 

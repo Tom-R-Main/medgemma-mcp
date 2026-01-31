@@ -173,7 +173,7 @@ def test_confidence_extraction() -> None:
 
     print("\nTesting confidence extraction...")
     assert extract_confidence("Confidence: 0.85") == 0.85
-    assert extract_confidence("This is clearly a fracture") == 0.85
+    assert extract_confidence("This clearly shows a fracture") == 0.85
     assert extract_confidence("Cannot exclude artifact") == 0.45
     assert extract_confidence("Normal findings") == 0.60
     print("  Confidence extraction: PASS")
