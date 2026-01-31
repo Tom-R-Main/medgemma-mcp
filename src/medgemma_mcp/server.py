@@ -108,12 +108,41 @@ mcp.add_tool(
 
 
 def main() -> None:
-    """Run the MedGemma MCP server on stdio transport."""
+    """Run the MedGemma MCP server.
+
+    Supports stdio (default), SSE, and streamable-http transports.
+    Use --transport sse to run as an HTTP server for remote access.
+
+    Usage:
+        medgemma-mcp                     # stdio (Claude Desktop)
+        medgemma-mcp --transport sse     # SSE on http://0.0.0.0:8000
+        medgemma-mcp --transport sse --port 9000
+    """
+    import argparse
+    import os
+
+    parser = argparse.ArgumentParser(description="MedGemma MCP Server")
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "sse", "streamable-http"],
+        default="stdio",
+        help="Transport protocol (default: stdio)",
+    )
+    parser.add_argument("--host", default="0.0.0.0", help="Host for SSE/HTTP (default: 0.0.0.0)")
+    parser.add_argument("--port", type=int, default=8000, help="Port for SSE/HTTP (default: 8000)")
+    args = parser.parse_args()
+
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
     )
-    mcp.run()
+
+    if args.transport in ("sse", "streamable-http"):
+        os.environ["FASTMCP_HOST"] = args.host
+        os.environ["FASTMCP_PORT"] = str(args.port)
+        logger.info(f"Starting MedGemma MCP server ({args.transport}) on {args.host}:{args.port}")
+
+    mcp.run(transport=args.transport)
 
 
 if __name__ == "__main__":
