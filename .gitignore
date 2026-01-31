@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking
+.pyright/
+.mypy_cache/
+
+# Model weights (do not commit)
+models/
+*.bin
+*.safetensors
+*.gguf
+
+# Reference repos (not part of project)
+python-sdk-main/
+modelcontextprotocol-main*/
+
+# Misc
+*.log
+.env
