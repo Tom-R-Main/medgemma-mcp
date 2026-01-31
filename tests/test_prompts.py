@@ -2,6 +2,8 @@
 
 from medgemma_mcp.prompts.templates import (
     Modality,
+    build_extraction_prompt,
+    build_fhir_summary_prompt,
     build_image_prompt,
     build_text_prompt,
     get_system_prompt,
@@ -86,3 +88,31 @@ def test_unknown_modality_falls_back_to_cxr():
     # Directly test the fallback behavior
     prompt = build_image_prompt(Modality.CHEST_XRAY, "test")
     assert "LUNGS" in prompt
+
+
+def test_fhir_summary_prompt():
+    """FHIR summary template includes clinical record and question."""
+    record = "Patient: female, 65yo. Active: Diabetes, Hypertension."
+    prompt = build_fhir_summary_prompt(record, "What are the key concerns?")
+    assert record in prompt
+    assert "What are the key concerns?" in prompt
+    assert "STEP 1" in prompt
+    assert "PROBLEM LIST" in prompt
+    assert "MEDICATION REVIEW" in prompt
+    assert "RISK ASSESSMENT" in prompt
+    assert "CONFIDENCE" in prompt
+
+
+def test_extraction_prompt():
+    """Extraction template includes clinical text and categories."""
+    text = "Patient presents with chest pain and shortness of breath."
+    prompt = build_extraction_prompt(text, "Extract all findings")
+    assert text in prompt
+    assert "Extract all findings" in prompt
+    assert "CONDITIONS" in prompt
+    assert "MEDICATIONS" in prompt
+    assert "ALLERGIES" in prompt
+    assert "VITALS" in prompt
+    assert "LAB_RESULTS" in prompt
+    assert "SYMPTOMS" in prompt
+    assert "CONFIDENCE" in prompt

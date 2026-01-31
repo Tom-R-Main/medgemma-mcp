@@ -15,7 +15,9 @@ from mcp.types import ToolAnnotations
 
 from medgemma_mcp.model.loader import medgemma_lifespan
 from medgemma_mcp.tools.analyze_image import analyze_medical_image
+from medgemma_mcp.tools.extract import extract_structured
 from medgemma_mcp.tools.medical_reason import medical_reason
+from medgemma_mcp.tools.summarize_fhir import summarize_fhir_record
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +61,42 @@ mcp.add_tool(
         "Covers differential diagnosis, treatment considerations, and evidence-based analysis. "
         "Returns step-by-step reasoning with confidence score. "
         "For image analysis, use analyze_medical_image instead."
+    ),
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
+
+mcp.add_tool(
+    summarize_fhir_record,
+    name="summarize_fhir_record",
+    title="Summarize FHIR Record",
+    description=(
+        "Summarize a FHIR R4 Bundle with clinical reasoning. "
+        "Parses Patient, Condition, MedicationRequest, Observation, AllergyIntolerance, "
+        "DiagnosticReport, and Procedure resources. Python handles all FHIR parsing; "
+        "MedGemma reasons about the extracted clinical data."
+    ),
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
+
+mcp.add_tool(
+    extract_structured,
+    name="extract_structured",
+    title="Extract Structured Data",
+    description=(
+        "Extract structured medical data from free-text clinical notes. "
+        "Identifies and categorizes conditions, medications, allergies, procedures, "
+        "vitals, lab results, symptoms, and family history. "
+        "Returns both raw reasoning and parsed structured output."
     ),
     annotations=ToolAnnotations(
         readOnlyHint=True,

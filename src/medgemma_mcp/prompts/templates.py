@@ -307,6 +307,73 @@ Limitations, areas of uncertainty, when specialist consultation is appropriate.
 
 QUESTION: {clinical_question}"""
 
+FHIR_SUMMARY_TEMPLATE = """Analyze the following clinical record and provide a medical summary.
+
+CLINICAL RECORD:
+{clinical_record}
+
+STEP 1: PATIENT OVERVIEW
+Summarize the patient's key demographics and clinical status.
+
+STEP 2: PROBLEM LIST ANALYSIS
+For each active condition:
+- Current status and severity (if determinable)
+- Relevant medications addressing this condition
+- Recent lab/vital trends related to this condition
+
+STEP 3: MEDICATION REVIEW
+- Are current medications appropriate for the conditions listed?
+- Any potential drug interactions to flag?
+- Any notable gaps in treatment?
+
+STEP 4: RISK ASSESSMENT
+Based on the available data:
+- Key clinical risks or concerns
+- Conditions requiring close monitoring
+- Any critical values or trends
+
+STEP 5: CLINICAL SUMMARY
+Provide a concise clinical summary suitable for a provider handoff.
+
+STEP 6: CONFIDENCE
+Score: [0.0-1.0]
+Rationale: [supporting evidence for this confidence level]
+
+QUESTION: {clinical_question}"""
+
+EXTRACTION_TEMPLATE = """Extract structured medical information from the following clinical text.
+
+Return your extraction in the EXACT format shown below. Use "none" if a category has no findings.
+
+CLINICAL TEXT:
+{clinical_text}
+
+STEP 1: IDENTIFY ENTITIES
+Read through the text and identify all medical entities.
+
+STEP 2: CATEGORIZE FINDINGS
+Organize findings into these categories:
+
+CONDITIONS: [list each condition/diagnosis mentioned]
+MEDICATIONS: [list each medication with dosage if available]
+ALLERGIES: [list each allergy/intolerance]
+PROCEDURES: [list each procedure mentioned]
+VITALS: [list each vital sign with value and unit]
+LAB_RESULTS: [list each lab result with value, unit, and reference range if available]
+SYMPTOMS: [list each symptom mentioned]
+FAMILY_HISTORY: [list relevant family history items]
+
+STEP 3: CLINICAL SIGNIFICANCE
+For each finding, note:
+- Whether it appears acute or chronic
+- Any abnormal values flagged
+
+STEP 4: CONFIDENCE
+Score: [0.0-1.0]
+Rationale: [how complete and unambiguous was the source text]
+
+QUESTION: {clinical_question}"""
+
 VERIFICATION_TEMPLATE = """Review your analysis above and verify:
 
 1. EVIDENCE GROUNDING: For each finding, can you point to specific evidence? Mark unverifiable findings as [UNVERIFIED].
@@ -362,3 +429,29 @@ def build_text_prompt(clinical_question: str) -> str:
         Formatted prompt string with CoT template.
     """
     return MEDICAL_REASON_TEMPLATE.format(clinical_question=clinical_question)
+
+
+def build_fhir_summary_prompt(clinical_record: str, clinical_question: str) -> str:
+    """Build the CoT user prompt for FHIR record summarization.
+
+    Args:
+        clinical_record: Plain-text clinical summary (from fhir_bundle_to_summary).
+        clinical_question: Specific question to answer about the record.
+
+    Returns:
+        Formatted prompt string with CoT template.
+    """
+    return FHIR_SUMMARY_TEMPLATE.format(clinical_record=clinical_record, clinical_question=clinical_question)
+
+
+def build_extraction_prompt(clinical_text: str, clinical_question: str) -> str:
+    """Build the CoT user prompt for structured clinical data extraction.
+
+    Args:
+        clinical_text: Free-text clinical note or report.
+        clinical_question: Specific extraction focus (or general).
+
+    Returns:
+        Formatted prompt string with CoT template.
+    """
+    return EXTRACTION_TEMPLATE.format(clinical_text=clinical_text, clinical_question=clinical_question)

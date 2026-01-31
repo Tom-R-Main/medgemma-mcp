@@ -7,9 +7,9 @@ and clinical reasoning. Targets the MedGemma Impact Challenge Agentic Workflow P
 ## Architecture
 - `src/medgemma_mcp/server.py` - FastMCP entry point with lifespan model loading
 - `src/medgemma_mcp/model/` - Model loading (lifespan) and inference wrapper
-- `src/medgemma_mcp/tools/` - MCP tool implementations (analyze_image, medical_reason)
-- `src/medgemma_mcp/prompts/` - Chain-of-thought prompt templates per modality
-- `src/medgemma_mcp/preprocessing/` - DICOM→PIL and image loading utilities
+- `src/medgemma_mcp/tools/` - MCP tool implementations (4 tools: analyze_image, medical_reason, summarize_fhir, extract)
+- `src/medgemma_mcp/prompts/` - Chain-of-thought prompt templates per modality (8 templates)
+- `src/medgemma_mcp/preprocessing/` - DICOM→PIL, image loading, FHIR Bundle→text conversion
 - `src/medgemma_mcp/safety/` - Confidence extraction and regulatory disclaimers
 
 ## Key Technical Decisions

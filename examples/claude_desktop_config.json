@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "medgemma": {
+      "command": "medgemma-mcp",
+      "env": {
+        "HF_HOME": "/path/to/your/huggingface/cache"
+      }
+    }
+  }
+}
