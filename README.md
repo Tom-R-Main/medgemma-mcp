@@ -2,7 +2,7 @@
 
 Local-first MCP server for medical AI inference using Google's MedGemma 4B-IT. Provides medical image analysis, clinical reasoning, FHIR record summarization, and structured data extraction as composable MCP tools.
 
-Built for the [MedGemma Impact Challenge](https://www.kaggle.com/competitions/medgemma-impact-challenge) Agentic Workflow Prize.
+Built for the [MedGemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge) Agentic Workflow Prize.
 
 ## Tools
 
