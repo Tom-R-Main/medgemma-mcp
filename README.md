@@ -19,7 +19,7 @@ All tools return structured output with confidence scores. Findings with confide
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/yourusername/medgemma-mcp
+git clone https://github.com/Tom-R-Main/medgemma-mcp
 cd medgemma-mcp
 pip install -e ".[dev]"
 
