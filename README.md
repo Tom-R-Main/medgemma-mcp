@@ -1,5 +1,11 @@
 # medgemma-mcp
 
+> [!WARNING]
+> **Deprecated and unmaintained research prototype. Do not use this software
+> for clinical care, diagnosis, treatment, or medical decision-making.** This
+> repository is archived for historical reference and receives no security,
+> compatibility, model, or safety updates.
+
 Local-first MCP server for medical AI inference using Google's MedGemma 4B-IT. Provides medical image analysis, clinical reasoning, FHIR record summarization, and structured data extraction as composable MCP tools.
 
 Built for the [MedGemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge) Agentic Workflow Prize.
@@ -15,7 +21,7 @@ Built for the [MedGemma Impact Challenge](https://www.kaggle.com/competitions/me
 
 All tools return structured output with confidence scores. Findings with confidence < 0.7 are flagged for clinical review.
 
-## Quick Start
+## Historical Setup (Unsupported)
 
 ```bash
 # 1. Clone and install
@@ -79,7 +85,7 @@ src/medgemma_mcp/
 │   ├── summarize_fhir.py  # summarize_fhir_record tool
 │   └── extract.py         # extract_structured tool
 ├── prompts/
-│   └── templates.py       # CoT prompt templates per modality (86% hallucination reduction)
+│   └── templates.py       # Task-specific prompt templates per modality
 ├── preprocessing/
 │   ├── images.py          # Image loading (file/base64/data URI)
 │   ├── dicom.py           # DICOM → PIL conversion with windowing
@@ -91,7 +97,7 @@ src/medgemma_mcp/
 
 ## Key Design Decisions
 
-- **Chain-of-thought prompting** reduces MedGemma hallucinations by 86.4% — templates are load-bearing infrastructure, not polish
+- **Task-specific prompting** — templates encode modality-specific instructions
 - **MedGemma 4B was NOT trained on FHIR** (67.6% vs base Gemma's 70.9% on EHRQA) — all FHIR parsing happens in Python
 - **Single-turn only** — multi-turn is "not evaluated/optimized" per Google; each tool call is stateless
 - **Conservative confidence** — low-confidence keywords are checked first; uncertain findings flag for review
